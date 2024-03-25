@@ -13,11 +13,11 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration
 @EnableWebSecurity
 public class WebSecurity {
-//  private ClientRegistrationRepository clientRegistrationRepository;
-//
-//  public WebSecurity(ClientRegistrationRepository clientRegistrationRepository) {
-//    this.clientRegistrationRepository = clientRegistrationRepository;
-//  }
+  private final ClientRegistrationRepository clientRegistrationRepository;
+
+  public WebSecurity(ClientRegistrationRepository clientRegistrationRepository) {
+    this.clientRegistrationRepository = clientRegistrationRepository;
+  }
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -29,21 +29,21 @@ public class WebSecurity {
                     .authenticated())
             .oauth2Login(Customizer.withDefaults())
             .logout(logout -> logout
-                    .logoutSuccessUrl("/")
-//                    .logoutSuccessHandler(oidcLogoutSuccessHandler())
-                    .invalidateHttpSession(true)
-                    .clearAuthentication(true)
-                    .deleteCookies("JSESSIONID")
+//                    .logoutSuccessUrl("/")
+                            .logoutSuccessHandler(oidcLogoutSuccessHandler())
+                            .invalidateHttpSession(true)
+                            .clearAuthentication(true)
+                            .deleteCookies("JSESSIONID")
             );
 
     return http.build();
   }
 
-//  private OidcClientInitiatedLogoutSuccessHandler oidcLogoutSuccessHandler() {
-//    var successHandler = new OidcClientInitiatedLogoutSuccessHandler(clientRegistrationRepository);
-//    successHandler.setPostLogoutRedirectUri("http://localhost:8093/");
-//
-//    return successHandler;
-//  }
+  private OidcClientInitiatedLogoutSuccessHandler oidcLogoutSuccessHandler() {
+    var successHandler = new OidcClientInitiatedLogoutSuccessHandler(clientRegistrationRepository);
+    successHandler.setPostLogoutRedirectUri("http://localhost:8093/");
+
+    return successHandler;
+  }
 
 }
